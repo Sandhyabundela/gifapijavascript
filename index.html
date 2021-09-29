@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <title>Giphy Search Engine</title>
+  
+  </head>
+  <body>
+    <main>
+      <form>
+        <label for="search" id="giphydes">Giphy</label>
+        <input id="search" type="search" />
+        <button id="btnSearch"><i class="fas fa-search"></i></button>
+      </form>
+      <div class="out"></div>
+      
+    </main>
+
+<!-- javascript part start here -->
+
+    <script>
+      let APIKEY = "5BXbUMWZqLHsQWlPcv5DYTtvMyhxLneM";
+      
+      document.addEventListener("DOMContentLoaded", init);
+      function init() {
+        document.getElementById("btnSearch").addEventListener("click", ev => {
+          ev.preventDefault(); //to stop the page reload
+          let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=16&q=`;
+          let str = document.getElementById("search").value.trim();
+          url = url.concat(str);
+          console.log(url);
+          fetch(url)
+            .then(response => response.json())
+            .then(content => {
+              //  data, pagination, meta
+              console.log(content.data);
+              console.log("META", content.meta);
+              let fig = document.createElement("figure");
+
+            console.log(content.data.length)
+            for (var i = 0; i < content.data.length; i++) {
+            	console.log(i)
+            	let img = document.createElement("img");
+
+ 			  	img.src = content.data[i].images.downsized.url;
+              
+              	fig.appendChild(img);
+
+ 			  }
+              
+              // fig.appendChild(img);
+
+             
+              let out = document.querySelector(".out");
+              out.insertAdjacentElement("afterbegin", fig);
+              document.querySelector("#search").value = "";
+            })
+            .catch(err => {
+              console.error(err);
+            });
+        });
+      }
+    </script>
+    <!-- javascript part end here -->
+
+  </body>
+</html>
+
+
